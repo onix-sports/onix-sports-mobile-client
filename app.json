@@ -28,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "54fef873-cb24-4f56-9782-ffc07d5d31fd"
+      }
+    },
+    "owner": "ya_myn"
   }
 }

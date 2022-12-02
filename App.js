@@ -1,20 +1,68 @@
+if (__DEV__) {
+  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
+import './global';
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
+import { NavigationContainer } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
+import { LogBox } from 'react-native';
+import { useAuth, usePreferences } from './src/hooks';
+import { fonts } from './src/core';
+import { AuthProvider, GlobalProvider, PreferencesProvider } from './src/contexts';
+import { RootNavigator } from './src/navigation';
 
-export default function App() {
+LogBox.ignoreLogs([
+  'Require cycles are allowed, but can result in uninitialized values.',
+  'Require cycle: node_modules/victory',
+]);
+
+SplashScreen.preventAutoHideAsync();
+
+function Main() {
+  const [appIsReady, setAppIsReady] = useState(false);
+  const { isThemeDark, theme } = usePreferences();
+  const { isValidating } = useAuth();
+
+  useEffect(() => {
+    async function prepare() {
+      await Font.loadAsync(fonts);
+      setAppIsReady(true);
+    }
+    prepare();
+  }, []);
+
+  const onReady = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady || isValidating) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <PaperProvider theme={theme}>
+      <GlobalProvider>
+        <NavigationContainer theme={theme} onReady={onReady}>
+          <RootNavigator />
+        </NavigationContainer>
+        <StatusBar style={isThemeDark ? 'light' : 'dark'} />
+      </GlobalProvider>
+    </PaperProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <AuthProvider>
+      <PreferencesProvider>
+        <Main />
+      </PreferencesProvider>
+    </AuthProvider>
+  );
+}
