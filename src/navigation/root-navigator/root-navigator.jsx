@@ -1,4 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
+
+import { BottomNavigator } from '../bottom-navigator';
+
 import { LogoTitle } from '../../components';
 import { useAuth } from '../../hooks';
 import {
@@ -25,35 +28,20 @@ function RootNavigator() {
       }}
     >
       {isSignedIn ? (
-        <Stack.Group>
-          <Stack.Screen
-            name="Channels"
-            component={ChannelListScreen}
-            options={{
-              headerTitle: (props) => <LogoTitle {...props} />,
-            }}
-          />
-          <Stack.Screen
-            name="ChannelDetail"
-            component={ChannelScreen}
-            options={{ title: '' }}
-          />
-          <Stack.Screen
-            name="Dashboard"
-            component={DashboardScreen}
-            options={{ title: '' }}
-          />
-          <Stack.Screen
-            name="WidgetDetail"
-            component={WidgetScreen}
-            options={{ title: '' }}
-          />
-          <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{ title: 'Settings' }}
-          />
-        </Stack.Group>
+          <Stack.Group>
+            <Stack.Screen
+              name="Back"
+              component={BottomNavigator}
+              options={{
+                headerTitle: (props) => <LogoTitle {...props} />,
+              }}
+            />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{ title: 'Settings' }}
+            />
+          </Stack.Group>
       ) : (
         <Stack.Screen
           name="SignIn"

@@ -3,7 +3,8 @@ import { baseApi } from '../../libs';
 import { messages } from '../../utils';
 import { AuthContext } from './auth-context';
 
-const getSession = () => baseApi.get('/auth/user');
+// const getSession = () => baseApi.get('/auth/user');
+const getSession = () => Promise.resolve({ data: { username: 'ya_myn', fullName: 'Test User', initials: 'initials' } })
 
 const login = (data) => baseApi.post('/auth/login', data);
 
@@ -18,6 +19,7 @@ function AuthProvider({ children }) {
     async function validateSession() {
       try {
         const { data } = await getSession();
+        console.log('data :>> ', data);
         setSession(data);
         setIsSignedIn(true);
       } catch (err) {
@@ -30,8 +32,14 @@ function AuthProvider({ children }) {
 
   const onLogin = async (username, password) => {
     try {
-      await login({ username, password });
-      const { data } = await getSession();
+      //MOCK
+      // await login({ username, password });
+      //
+      //
+      // const { data } = await getSession();
+      ///
+
+      const data = { username, fullName: 'Test User', initials: 'initials' }
       setSession(data);
       setIsSignedIn(true);
     } catch (err) {

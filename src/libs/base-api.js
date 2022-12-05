@@ -4,5 +4,5 @@ import Constants from 'expo-constants';
 const instance = axios.create({
   baseURL: Constants.manifest.extra.baseApiUrl,
 });
-
+console.log('Constants.manifest.extra.baseApiUrl :>> ', Constants.manifest.extra.baseApiUrl);
 export { instance as baseApi };

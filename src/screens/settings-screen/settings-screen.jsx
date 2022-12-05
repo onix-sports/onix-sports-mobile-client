@@ -6,11 +6,13 @@ import { useAuth, useGlobal } from '../../hooks';
 
 function SettingsScreen() {
   const { confirm, progress } = useGlobal();
+
   const {
-    session: { username, fullName, initials },
+    session,
     onLogout,
   } = useAuth();
 
+  const { username, fullName, initials } = session;
   const handleSignOutPress = async () => {
     try {
       const confirmed = await confirm({
