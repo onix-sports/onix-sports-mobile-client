@@ -15,25 +15,37 @@ const getTournament = (status) => baseApi.get('/tournaments', {
   }
 });
 
+const getGames = (tournament) => baseApi.get('/games', {
+  params: {
+    tournament
+  }
+});
+
+const postTournament = (players) => baseApi.post('/tournaments/generate', { players });
+
+const patchCloseTournament = (id) => baseApi.post('/tournaments/close', { id });
+
 const useActiveTournament = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [opened, setOpened] = useState(null);
-  const [closed, setClosed] = useState(null);
+  const [activeTournament, setActiveTournament] = useState(null);
+  const [activeGames, setActiveGames] = useState([]);
 
   useFocusEffect(
     useCallback(() => {
       async function fetchTournament() {
         setIsLoading(true);
         try {
-          const [opened, closed] = await Promise.all([
-            getTournament(), 
-            getTournament(tournamentsStatuses.CLOSED)
-          ]);
+          const { data } = await getTournament(tournamentsStatuses.OPENED);
+          if (data?.[0]) {
+            setActiveTournament(data[0]);
 
-          setOpened(opened.data?.[0] || null)
-          setClosed(closed.data?.[0] || null)
+            const gamesRes = await getGames(data[0]._id);
 
-        } catch (err) {
+            setActiveGames(gamesRes.data);
+          }
+
+        } catch (error) {
+
           console.error(messages.failedToFetch);
         }
         setIsLoading(false);
@@ -42,11 +54,42 @@ const useActiveTournament = () => {
     }, [])
   );
 
+  const createTournament = async (players) => {
+    setIsLoading(true);
+    try {
+      const { data } = await postTournament(players);
+
+      setActiveTournament(data.tournament);
+      setActiveGames(data.games)
+    } catch (error) {
+      console.error(messages.failedToFetch);
+    }
+    setIsLoading(false);
+  };
+
+  const closeTournament = async () => {
+    setIsLoading(true);
+    try {
+      if (!activeTournament) {
+        return;
+      }
+  
+      await patchCloseTournament(activeTournament._id);
+
+      setActiveTournament(null);
+      setActiveGames([])
+    } catch (error) {
+      console.error(messages.failedToFetch);
+    }
+    setIsLoading(false);
+  }
 
   return {
     isLoading,
-    opened,
-    closed
+    activeTournament,
+    activeGames,
+    createTournament,
+    closeTournament
   };
 };
 

@@ -4,17 +4,17 @@ import { ScreenWrapper, ScreenWithLoader } from '../../components';
 import { useUsers } from '../../hooks';
 import {  Button, List  } from 'react-native-paper';
 
-const GenerationTournament = () => {
+const GenerationTournament = ({ onCreateTournament }) => {
     const {isLoading, users} = useUsers();
 
     const [players, setPlayers] = React.useState([]);
     const [selected, setSelected] = React.useState([]);
 
     React.useEffect(() => {
-        if (!isLoading && !players.length) {
+        if (!isLoading) {
             setPlayers([...users])
         }
-    }, [isLoading, users, players, setPlayers, selected, setSelected]);
+    }, [isLoading, users]);
    
     return (
         <ScreenWithLoader isLoading={isLoading}>
@@ -24,7 +24,7 @@ const GenerationTournament = () => {
                     <ScreenWrapper withScrollView={true} style={styles.players}>
                         <List.Subheader>Players</List.Subheader>
                         {players.map((player) => {
-                            const {_id, name, avatarUrl } = player;
+                            const { _id, name, avatarUrl } = player;
 
                             return (
                                 <List.Item key={`players-${_id}`}  title={name} left={() => <List.Icon style={{ borderRadius: '50%' }} icon={{ uri: avatarUrl }} />} onPress={() => {
@@ -50,7 +50,7 @@ const GenerationTournament = () => {
                     </ScreenWrapper>
                 </List.Section>
             </View>
-            <Button disabled={selected.length < 4 && (selected.length < 7 || selected.length === 8)} icon="gamepad" mode="contained" onPress={() => console.log('Pressed')}>
+            <Button style={styles.submit} disabled={selected.length < 4 && (selected.length < 7 || selected.length === 8)} icon="gamepad" mode="contained" onPress={() => onCreateTournament(selected.map(({_id}) => _id))}>
                  Generate
             </Button>
         </ScreenWithLoader>
@@ -63,6 +63,9 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         flex: 12
        
+    },
+    submit: {
+        flex: 0.7
     },
     players: {
         borderRightColor: '#fff',
