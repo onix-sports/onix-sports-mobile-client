@@ -94,7 +94,7 @@ function GameTrackerScreen({ navigation, route }) {
 
     React.useEffect(() => {
         setDisabledStartBtn(false);
-        console.log('gameController :>> ', gameController);
+
     }, [gameController]);
 
     React.useEffect(() => {

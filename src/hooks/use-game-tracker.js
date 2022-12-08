@@ -18,12 +18,10 @@ const useGameTracker = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [gameSocket, setGameSocket] = useState(null);
   const [games, setGames] = useState({});
-  // const [openGameScreen, setIsLoading] = useState(true);
-  // const [leaderboard, setLeaderboard] = useState([]);
 
   const initGameSocket = (id, cb) => {
     if (!gameSocket) {
-      const socket = io("ws://localhost:3010", {
+      const socket = io("wss://onix-sports-old.herokuapp.com", {
         transports: ['websocket']
       });
 
