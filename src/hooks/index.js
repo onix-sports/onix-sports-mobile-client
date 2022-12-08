@@ -12,4 +12,5 @@ export * from './use-preferences';
 export * from './use-render-counter';
 export * from './use-widget';
 export * from './use-active-tournament';
-export * from './use-users'
+export * from './use-users';
+export * from './use-game-tracker';

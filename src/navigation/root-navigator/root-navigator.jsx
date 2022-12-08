@@ -11,6 +11,7 @@ import {
   SettingsScreen,
   SignInScreen,
   WidgetScreen,
+  GameTrackerScreen
 } from '../../screens';
 
 const Stack = createStackNavigator();
@@ -40,6 +41,11 @@ function RootNavigator() {
               name="Settings"
               component={SettingsScreen}
               options={{ title: 'Settings' }}
+            />
+            <Stack.Screen
+              name="GameTracker"
+              component={GameTrackerScreen}
+              options={{ title: '' }}
             />
           </Stack.Group>
       ) : (

@@ -48,7 +48,7 @@ const useUsers = () => {
         setIsLoading(true);
         try {
          const { data } = await getUsers();
-
+          console.log('data :>> ', data);
           setUsers(data);
           // data.forEach((doc => setPlayersAvatars(doc, (player) => {
           //   return setUsers(users.map(user => {
@@ -66,6 +66,7 @@ const useUsers = () => {
           //   }))
           // })))
         } catch (err) {
+          console.log('err.response.data :>> ', err.toJSON());
           console.error(messages.failedToFetch);
         }
         setIsLoading(false);

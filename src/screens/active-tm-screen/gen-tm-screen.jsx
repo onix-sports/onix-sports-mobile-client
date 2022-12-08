@@ -6,7 +6,7 @@ import {  Button, List  } from 'react-native-paper';
 
 const GenerationTournament = ({ onCreateTournament }) => {
     const {isLoading, users} = useUsers();
-
+    console.log('users :>> ', users);
     const [players, setPlayers] = React.useState([]);
     const [selected, setSelected] = React.useState([]);
 

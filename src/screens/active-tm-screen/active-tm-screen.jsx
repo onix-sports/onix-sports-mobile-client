@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useNavigation } from '@react-navigation/native';
+
 import { ScreenWrapper,  ScreenActivityIndicator } from '../../components';
 import { useActiveTournament } from '../../hooks';
 
@@ -7,6 +9,8 @@ import { Text, IconButton, Title, Button } from 'react-native-paper';
 import {View, TouchableOpacity, StyleSheet } from 'react-native'
 
 export const ActiveTournament = () => {
+    const navigation = useNavigation();
+
     const {isLoading, activeTournament, activeGames, createTournament, closeTournament} = useActiveTournament();
 
     if (isLoading) {
@@ -29,9 +33,13 @@ export const ActiveTournament = () => {
                     </View>
                     {activeGames.map((game, index) => {
                         const { _id, players, status } = game;
+
                         return (
                             <TouchableOpacity key={_id} onPress={() => {
-                            
+                                navigation.navigate('GameTracker', {
+                                    id: _id,
+                                    status
+                                })
                             }}>
                             <View style={styles.gameWrap} accessibilityRole="button" accessible>
                                 <Text style={styles.indexRow}>{index + 1}.</Text>
@@ -83,8 +91,7 @@ const styles = StyleSheet.create({
   statusTitle: { flex: 2, textAlign, fontSize: viewFontSize  },
   redText: { textAlign, color: '#c2524a', fontSize: viewFontSize, padding: rowPadding },
   blueText: { textAlign, color: '#4099e0', fontSize: viewFontSize, padding: rowPadding },
-  redRow: { flex: 3,  },
+  redRow: { flex: 3, },
   statusRow: { flex: 2, textAlign, fontSize: viewFontSize, padding: rowPadding },
-  blueRow: { flex: 3,   }
- 
+  blueRow: { flex: 3 }
 });

@@ -19,7 +19,7 @@ function AuthProvider({ children }) {
     async function validateSession() {
       try {
         const { data } = await getSession();
-        console.log('data :>> ', data);
+  
         setSession(data);
         setIsSignedIn(true);
       } catch (err) {

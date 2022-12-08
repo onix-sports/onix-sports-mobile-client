@@ -23,7 +23,7 @@ const getGames = (tournament) => baseApi.get('/games', {
 
 const postTournament = (players) => baseApi.post('/tournaments/generate', { players });
 
-const patchCloseTournament = (id) => baseApi.post('/tournaments/close', { id });
+const patchCloseTournament = (id) => baseApi.patch('/tournaments/close', { id });
 
 const useActiveTournament = () => {
   const [isLoading, setIsLoading] = useState(true);

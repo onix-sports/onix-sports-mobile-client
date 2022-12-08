@@ -4,3 +4,4 @@ export * from './dashboard-screen';
 export * from './settings-screen';
 export * from './sign-in-screen';
 export * from './widget-screen';
+export * from './game-tracker-screen';
