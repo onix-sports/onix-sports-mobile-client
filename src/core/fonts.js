@@ -13,13 +13,10 @@ import {
   Roboto_900Black_Italic,
 } from '@expo-google-fonts/roboto';
 
-
-// const astroSpace = require('../../assets/AstroSpace-0Wl3o.otf');
-// const nexaRegular = require('../src/assets/fonts/trial/Nexa-Trial-Regular.otf');
+import astroSpace from '../../assets/fonts/AstroSpace-0Wl3o.otf';
 
 const fonts = {
-  // AstroSpace: astroSpace,
-  // Nexa: nexaRegular,
+  AstroSpace: astroSpace,
   Roboto_100Thin,
   Roboto_100Thin_Italic,
   Roboto_300Light,

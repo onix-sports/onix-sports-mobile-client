@@ -11,8 +11,8 @@ module.exports = ({ config }) => {
         package: "com.ya_myn.onixsf"
       },
       projectId: "54fef873-cb24-4f56-9782-ffc07d5d31fd",
-      baseApiUrl: process.env.API_URL || 'https://onix-sports-old.herokuapp.com',
-      wsUrl: process.env.WS_API || 'wss://onix-sports-old.herokuapp.com',
+      baseApiUrl: process.env.API_URL || 'https://onix-sports-beta.herokuapp.com',
+      wsUrl: process.env.WS_API || 'wss://onix-sports-beta.herokuapp.com',
       thingSpeakApiUrl: process.env.THINGSPEAK_API_URL,
     },
   };

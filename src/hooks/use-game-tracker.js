@@ -21,12 +21,12 @@ const useGameTracker = () => {
 
   const initGameSocket = (id, cb) => {
     if (!gameSocket) {
-      const socket = io("wss://onix-sports-old.herokuapp.com", {
+      const socket = io("wss://onix-sports-beta.herokuapp.com", {
         transports: ['websocket']
       });
 
       setGameSocket(socket);
-      console.log('socket :>> ', socket);
+
       setIsLoading(true);
 
       socket.on("connect", () => {
@@ -44,22 +44,22 @@ const useGameTracker = () => {
       });
       socket.on('finished', ({ info }) => { console.log('info :>> ', info); });
       socket.on("disconnect", (reason) => {
-        console.log('reason :>> ', reason);
+        // console.log('reason :>> ', reason);
         if (reason === "io server disconnect") {
           socket.connect();
         }
 
-        console.error(messages.failedToFetch);
+        // console.error(messages.failedToFetch);
       });
 
       socket.on("exception", (error) => {
-        console.log('error222 :>> ', error.message);
-        console.error(messages.failedToFetch);
+        // console.log('error222 :>> ', error.message);
+        // console.error(messages.failedToFetch);
       });
 
       socket.on("connect_error", (error) => {
-        console.log('error111 :>> ', error.message);
-        console.error(messages.failedToFetch);
+        // console.log('error111 :>> ', error.message);
+        // console.error(messages.failedToFetch);
       });
 
       return

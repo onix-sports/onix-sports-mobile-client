@@ -36,18 +36,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   field: {
-    fontFamily: 'Nexa',
+    // fontFamily: 'Nexa',
     fontSize: 50,
     textShadowOffset: { width: 0.5, height: 0.5 },
     textShadowRadius: 3,
     textShadowColor: '#090c14',
   },
   suffix: {
-    fontFamily: 'Nexa',
+    // fontFamily: 'Nexa',
     fontSize: 35,
   },
   noData: {
-    fontFamily: 'Nexa',
+    // fontFamily: 'Nexa',
     fontSize: 20,
   },
 });

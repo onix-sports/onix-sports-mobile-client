@@ -34,7 +34,6 @@ function PlayerChip({ selected, onPress, goals, player, autogolPlayer, onAutogol
     const shortName = name.length < 7 ? name : `${name.substring(0, 7)}...`;
 
     const isSetAutogol = autogolPlayer && autogolPlayer?.team !== team;
-    console.log('autogolPlayer :>> ', autogolPlayer);
 
     return (
         <Chip 
@@ -126,7 +125,7 @@ function GameTrackerScreen({ navigation, route }) {
     const isFinished = status === GameStatus.FINISHED;
   
     return (
-        <ScreenWithLoader isLoading={false}>
+        <ScreenWithLoader isLoading={isLoading}>
             <ScreenWrapper withScrollView={true}>
                 <View style={{ alignItems: 'center', position: 'relative' }}>
                 <View style={{ position: 'absolute', zIndex: paused ? 120 : -1, backgroundColor: paused ? '#00000090' : null, width: '100%', height: 350 }}></View>

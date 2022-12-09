@@ -66,8 +66,8 @@ const useUsers = () => {
           //   }))
           // })))
         } catch (err) {
-          console.log('err.response.data :>> ', err.toJSON());
-          console.error(messages.failedToFetch);
+          // console.log('err.response.data :>> ', err.toJSON());
+          // console.error(messages.failedToFetch);
         }
         setIsLoading(false);
        

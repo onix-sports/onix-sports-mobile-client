@@ -35,7 +35,8 @@ const useActiveTournament = () => {
       async function fetchTournament() {
         setIsLoading(true);
         try {
-          const { data } = await getTournament(tournamentsStatuses.OPENED);
+          const { data } = await getTournament();
+          console.log('data :>> ', data);
           if (data?.[0]) {
             setActiveTournament(data[0]);
 
@@ -46,7 +47,7 @@ const useActiveTournament = () => {
 
         } catch (error) {
 
-          console.error(messages.failedToFetch);
+          // console.error(messages.failedToFetch);
         }
         setIsLoading(false);
       }
@@ -62,7 +63,7 @@ const useActiveTournament = () => {
       setActiveTournament(data.tournament);
       setActiveGames(data.games)
     } catch (error) {
-      console.error(messages.failedToFetch);
+      // console.error(messages.failedToFetch);
     }
     setIsLoading(false);
   };
@@ -79,7 +80,7 @@ const useActiveTournament = () => {
       setActiveTournament(null);
       setActiveGames([])
     } catch (error) {
-      console.error(messages.failedToFetch);
+      // console.error(messages.failedToFetch);
     }
     setIsLoading(false);
   }

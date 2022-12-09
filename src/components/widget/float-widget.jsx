@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 30,
     textAlignVertical: 'center',
-    fontFamily: 'Nexa',
+    // fontFamily: 'Nexa',
     color: 'white',
     height: 54,
     paddingHorizontal: 8,

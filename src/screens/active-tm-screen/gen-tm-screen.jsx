@@ -27,7 +27,7 @@ const GenerationTournament = ({ onCreateTournament }) => {
                             const { _id, name, avatarUrl } = player;
 
                             return (
-                                <List.Item key={`players-${_id}`}  title={name} left={() => <List.Icon style={{ borderRadius: '50%' }} icon={{ uri: avatarUrl }} />} onPress={() => {
+                                <List.Item key={`players-${_id}`}  title={name} left={() => <List.Icon style={{ borderRadius: 50 }} icon={{ uri: avatarUrl }} />} onPress={() => {
                                     setPlayers(players.filter(item => item._id !== _id))
                                     setSelected([...selected, player])
                                 }}/>
@@ -42,7 +42,7 @@ const GenerationTournament = ({ onCreateTournament }) => {
                             const {_id, name, avatarUrl} = player;
 
                             return (
-                            <List.Item key={`selected-${_id}`} title={name} left={() => <List.Icon  style={{ borderRadius: '50%' }} icon={{ uri: avatarUrl }} />} onPress={() => {
+                            <List.Item key={`selected-${_id}`} title={name} left={() => <List.Icon  style={{ borderRadius: 50 }} icon={{ uri: avatarUrl }} />} onPress={() => {
                                 setSelected(selected.filter(item => item._id !== _id))
                                 setPlayers([...players, player])
                             }}/>
