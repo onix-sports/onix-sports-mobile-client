@@ -38,6 +38,8 @@
       }
     },
     "owner": "ya_myn",
-    "runtimeVersion": "1.0.0"
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
   }
 }

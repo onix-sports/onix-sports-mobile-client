@@ -1,15 +1,31 @@
-import { Manager } from "socket.io-client";
+import { io } from "socket.io-client";
 import Constants from 'expo-constants';
 
-const manager = new Manager('http://localhost:3010', {
-  reconnectionDelayMax: 10000,
+
+const socket = io(Constants.expoConfig.extra.wsUrl, {
   transports: ['websocket']
 });
 
-export { manager as io };
+socket.on("disconnect", (reason) => {
+      if (reason === "io server disconnect") {
+        socket.connect();
+      }
+});
 
-// const socket = manager.socket("/my-namespace", {
-//   auth: {
-//     token: "123"
-//   }
-// });
+function withConnect(cb) {
+  if (socket.connected) {
+    return cb(socket)
+  }
+
+  socket.on("connect", () => {
+    cb(socket);
+  });
+}
+
+function onException(cb) {
+  socket.on("exception", cb);
+}
+
+const ws = { onException, withConnect, socket };
+
+export { ws };

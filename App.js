@@ -32,6 +32,7 @@ function Main() {
       await Font.loadAsync(fonts);
       setAppIsReady(true);
     }
+
     prepare();
   }, []);
 

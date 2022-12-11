@@ -4,7 +4,7 @@ import { messages } from '../../utils';
 import { AuthContext } from './auth-context';
 
 // const getSession = () => baseApi.get('/auth/user');
-const getSession = () => Promise.resolve({ data: { username: 'ya_myn', fullName: 'Test User', initials: 'initials' } })
+const getSession = () => Promise.resolve({ data: { username: 'ya_myn', fullName: 'Test User', initials: 'Y M', role: 'admin' } })
 
 const login = (data) => baseApi.post('/auth/login', data);
 
@@ -39,7 +39,7 @@ function AuthProvider({ children }) {
       // const { data } = await getSession();
       ///
 
-      const data = { username, fullName: 'Test User', initials: 'initials' }
+      const data = { username, fullName: 'Test User', initials: 'Y M', role: 'admin' }
       setSession(data);
       setIsSignedIn(true);
     } catch (err) {

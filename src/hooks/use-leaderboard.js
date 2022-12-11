@@ -22,6 +22,7 @@ const useLeaderboard = () => {
 
           setLeaderboard(data);
         } catch (err) {
+          console.log('err :>> ', err);
           console.error(messages.failedToFetch);
         }
         setIsLoading(false);
