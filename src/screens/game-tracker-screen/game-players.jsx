@@ -71,7 +71,7 @@ function Players({ players, canMakeAction, onSwap, selected, setSelected, autogo
 
     return (
         <>
-            {!canMakeAction && (
+            {canMakeAction && (
                 <>
                     <SwapEl top={145} red onPress={() => onSwap(players[0]._id)} />
                     <SwapEl top={145} left={80} onPress={() => onSwap(players[2]._id)} />
