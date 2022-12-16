@@ -60,7 +60,7 @@ export const ActiveTournament = () => {
                         )
                     })}
                 </View>
-                <Button style={styles.close} icon="gamepad" mode="contained" onPress={closeTournament}>
+                <Button disabled={false} style={styles.close} icon="gamepad" mode="contained" onPress={closeTournament}>
                     Close Tournament
                 </Button>
         </ScreenWrapper>

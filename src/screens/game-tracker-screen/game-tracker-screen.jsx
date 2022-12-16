@@ -1,19 +1,26 @@
 import * as React from 'react';
-import { Title, Button, IconButton } from 'react-native-paper';
+import { Title, Button, IconButton, Divider, List, useTheme, Paragraph, Dialog, Portal, Provider } from 'react-native-paper';
 import {  View  } from 'react-native';
 import GameFieldImg from './game-field-bg.svg';
 import { ScreenWrapper, ScreenWithLoader } from '../../components';
 import { useGameTracker, useAuth } from '../../hooks';
 import { Players } from './game-players';
+import { GameActivitiesList } from './game-activities-list';
+import { GameTimer } from './game-timer';
 
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(duration);
 
 function GoalsT({ color, text }) {
     return (<Title style={{ fontSize: 24, color, padding: 5, fontWeight: "800" }}>{text}</Title>)
 }
 
 
-
 function GameTrackerScreen({ route }) {
+    const theme = useTheme();
+
     const { initGameController, GameStatus } = useGameTracker();
     const { session } = useAuth();
 
@@ -23,8 +30,10 @@ function GameTrackerScreen({ route }) {
 
     const [autogolPlayer, setAutogolPlayer] = React.useState(null);
 
-    const [status, setStatus] = React.useState(null);
+    const [activities, setActivities] = React.useState([]);
 
+    const [status, setStatus] = React.useState(null);
+    const [startedAt, setStartedAt] = React.useState(null);
     const [score, setScore] = React.useState({ blue: 0, red: 0});
     const [players, setPlayers] = React.useState([]);
 
@@ -34,6 +43,16 @@ function GameTrackerScreen({ route }) {
     React.useEffect(() => {
         gameController.onUpdate((game) => {
             setStatus(game.status)
+            setStartedAt(game.startedAt)
+            setActivities(game.actions
+                .sort((prev, next) => next.timeFromStart - prev.timeFromStart)
+                .map(activity => {
+                    return {
+                        ...activity,
+                        timestamp: dayjs.duration(activity.timeFromStart).format('mm:ss')
+                    }
+                })
+            );
             setScore(game.score);
             setPlayers(game.players);
             setPaused(game.status === GameStatus.PAUSED || game.status === GameStatus.DRAFT);
@@ -61,14 +80,15 @@ function GameTrackerScreen({ route }) {
   
     return (
         <ScreenWithLoader isLoading={false}>
-            <ScreenWrapper withScrollView={true}>
-                <View style={{ alignItems: 'center', position: 'relative' }}>
-                <View style={{ position: 'absolute', zIndex: paused ? 120 : -1, backgroundColor: paused ? '#00000090' : null, width: '100%', height: 350 }}></View>
-                    <View style={{ position: 'absolute', top: 10, flexDirection: 'row' }}>
+                <View style={{ alignItems: 'center', position: 'relative', marginBottom: 25 }}>
+                <View style={{ position: 'absolute', zIndex: paused ? 120 : -1, backgroundColor: paused ? '#00000090' : null, width: '100%', height: 380 }}></View>
+                    <View style={{ position: 'absolute', top: 5, flexDirection: 'row' }}>
                         <GoalsT text={score.red} color={'#c2524a'} />
                         <GoalsT text={'X'} color={'#fff'} />
                         <GoalsT text={score.blue} color={'#4099e0'} />
                     </View>
+                    <GameTimer startedAt={startedAt} />
+                  
                     {session.role === 'admin' 
                         ? (<>
                             {!disabledStartBtn && (
@@ -110,7 +130,7 @@ function GameTrackerScreen({ route }) {
                         height={350}
                     />
                     {selectedPlayerId && !paused && (
-                    <View style={{ position: 'absolute', bottom: canMakeAction ? -20 : 5, alignItems: 'center', width: '100%' }}>
+                    <View style={{ position: 'absolute', bottom: canMakeAction ? -15 : 5, alignItems: 'center', width: '100%' }}>
                         <Title>{autogolPlayer ? 'Select enemy you will give a goal' : `${selectedPlayer.name}, goals: | G: ${selectedPlayer.rGoals} | F: ${selectedPlayer.mGoals} |`}</Title>
                         {canMakeAction && (
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -130,8 +150,8 @@ function GameTrackerScreen({ route }) {
                     )}
                     
                 </View>
-               
-            </ScreenWrapper>
+                <Divider />
+                <GameActivitiesList activities={activities} onDelete={gameController?.cancel} />        
         </ScreenWithLoader>
     );
 }
