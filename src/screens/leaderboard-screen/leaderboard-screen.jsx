@@ -13,11 +13,16 @@ const Headers = [
 ];
 
 export const Leaderboard = () => {
-    const {isLoading, leaderboard} = useLeaderboard();
+    const {
+        isLoading, 
+        leaderboard, 
+        onRefresh,
+        isRefreshing
+    } = useLeaderboard();
 
     return (
         <ScreenWithLoader isLoading={isLoading}>
-            <ScreenWrapper withScrollView={true}>
+            <ScreenWrapper withScrollView={true} onRefresh={onRefresh} isRefreshing={isRefreshing}>
                 <DataTable>
                 <DataTable.Header>
                     {Headers.map(({ title, numeric }, index) => (

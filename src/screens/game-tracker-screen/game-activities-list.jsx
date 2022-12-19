@@ -1,4 +1,4 @@
-import { Title, Button, IconButton, Divider, List, useTheme, Paragraph, Dialog, Portal, Provider } from 'react-native-paper';
+import { Button, List, useTheme, Paragraph, Dialog, Portal } from 'react-native-paper';
 import {  View  } from 'react-native';
 import * as React from 'react';
 
@@ -51,8 +51,7 @@ function GameActivitiesList({ activities, onDelete, canMakeAction  }) {
     return (
         <>
             <View> 
-
-                    <Portal>
+                <Portal>
                     <Dialog visible={showedDialog} onDismiss={() => setRemoveAction(null)}>
                         <Dialog.Title>Remove Goal</Dialog.Title>
                         <Dialog.Content>
@@ -66,18 +65,14 @@ function GameActivitiesList({ activities, onDelete, canMakeAction  }) {
                         }}>Confirm</Button>
                         </Dialog.Actions>
                     </Dialog>
-                    </Portal>
-                 </View>
-   
-                <ScreenWrapper withScrollView={true}>
+                </Portal>
+            </View>
+            <ScreenWrapper withScrollView={true}>
                 <List.Section>
                     <List.Subheader>Activity</List.Subheader>
                         {activities.map(({type, player, id, timestamp }, index) => {
                             const isGoalType = ['ARGOAL', 'AMGOAL', 'RGOAL', 'MGOAL'].includes(type);
                             let title = GameActionTypes[type].title
-
-
-
 
                             if (isGoalType) {
                                 title = `${player.name} scored ${title}`
@@ -112,7 +107,7 @@ function GameActivitiesList({ activities, onDelete, canMakeAction  }) {
                             )
                         })}
                         
-                    </List.Section>
+                </List.Section>
             </ScreenWrapper>
         </>
     )

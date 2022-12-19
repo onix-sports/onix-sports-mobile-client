@@ -12,11 +12,10 @@ const getLeaderboard = () => baseApi.get('/statistics/leaderboard', {
 const useLeaderboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [leaderboard, setLeaderboard] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      async function fetchLeaderboard() {
-        setIsLoading(true);
+  async function fetchLeaderboard(statusSetter) {
+        statusSetter(true);
         try {
          const { data } = await getLeaderboard();
 
@@ -25,16 +24,24 @@ const useLeaderboard = () => {
           console.log('err :>> ', err);
           console.error(messages.failedToFetch);
         }
-        setIsLoading(false);
-      }
-      fetchLeaderboard();
+        statusSetter(false);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchLeaderboard(setIsLoading);
     }, [])
   );
 
+  const onRefresh = useCallback(() => {
+    fetchLeaderboard(setIsRefreshing);
+  }, []);
 
   return {
     isLoading,
     leaderboard,
+    onRefresh,
+    isRefreshing
   };
 };
 

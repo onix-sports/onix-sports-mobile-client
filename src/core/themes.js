@@ -48,6 +48,7 @@ const themes = {
       surface: '#262a33',
       card: '#262a33',
       text: '#ffffff',
+      indicators: '#ffffff',
     },
     fonts,
   },

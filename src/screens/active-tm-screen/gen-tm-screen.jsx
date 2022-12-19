@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { StyleSheet, View } from "react-native";
 import { ScreenWrapper, ScreenWithLoader } from '../../components';
-import { useUsers } from '../../hooks';
+import { useUsers, useActiveTournaments } from '../../hooks';
 import {  Button, List  } from 'react-native-paper';
 
-const GenerationTournament = ({ onCreateTournament }) => {
+const GenerationTournamentScreen = () => {
     const {isLoading, users} = useUsers();
+    const {
+        createTournament, 
+    } = useActiveTournaments();
 
     const [players, setPlayers] = React.useState([]);
     const [selected, setSelected] = React.useState([]);
@@ -27,7 +30,9 @@ const GenerationTournament = ({ onCreateTournament }) => {
                             const { _id, name, avatarUrl } = player;
 
                             return (
-                                <List.Item key={`players-${_id}`}  title={name} left={() => <List.Icon style={{ borderRadius: 50 }} icon={{ uri: avatarUrl }} />} onPress={() => {
+                                <List.Item key={`players-${_id}`}  title={name} left={() => <List.Icon onError={(e) => {
+                                console.log(e)
+                            }} style={{ borderRadius: 50 }} icon={{ uri: avatarUrl }} />} onPress={() => {
                                     setPlayers(players.filter(item => item._id !== _id))
                                     setSelected([...selected, player])
                                 }}/>
@@ -42,7 +47,9 @@ const GenerationTournament = ({ onCreateTournament }) => {
                             const {_id, name, avatarUrl} = player;
 
                             return (
-                            <List.Item key={`selected-${_id}`} title={name} left={() => <List.Icon  style={{ borderRadius: 50 }} icon={{ uri: avatarUrl }} />} onPress={() => {
+                            <List.Item key={`selected-${_id}`} title={name} left={() => <List.Icon onError={(e) => {
+                                console.log(e)
+                            }} style={{ borderRadius: 50 }} icon={{ uri: avatarUrl }} />} onPress={() => {
                                 setSelected(selected.filter(item => item._id !== _id))
                                 setPlayers([...players, player])
                             }}/>
@@ -50,7 +57,7 @@ const GenerationTournament = ({ onCreateTournament }) => {
                     </ScreenWrapper>
                 </List.Section>
             </View>
-            <Button style={styles.submit} disabled={selected.length < 4 && (selected.length < 7 || selected.length === 8)} icon="gamepad" mode="contained" onPress={() => onCreateTournament(selected.map(({_id}) => _id))}>
+            <Button style={styles.submit} disabled={selected.length < 4 && (selected.length < 7 || selected.length === 8)} icon="gamepad" mode="contained" onPress={() => createTournament(selected.map(({_id}) => _id), true)}>
                  Generate
             </Button>
         </ScreenWithLoader>
@@ -65,7 +72,8 @@ const styles = StyleSheet.create({
        
     },
     submit: {
-        flex: 0.7
+        flex: 0.7,
+        marginBottom: 25
     },
     players: {
         borderRightColor: '#fff',
@@ -80,4 +88,4 @@ const styles = StyleSheet.create({
 
 });
 
-export { GenerationTournament };
+export { GenerationTournamentScreen };

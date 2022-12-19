@@ -3,17 +3,6 @@ import { useCallback, useState } from 'react';
 import { baseApi } from '../libs';
 import { messages } from '../utils';
 
-const tournamentsStatuses = {
-  CLOSED: 'CLOSED',
-  OPENED: 'OPENED'
-}
-
-const getTournament = (status) => baseApi.get('/tournaments', {
-  params: {
-    status,
-    limit: 1
-  }
-});
 
 const getGames = (tournament) => baseApi.get('/games', {
   params: {
@@ -21,77 +10,48 @@ const getGames = (tournament) => baseApi.get('/games', {
   }
 });
 
-const postTournament = (players) => baseApi.post('/tournaments/generate', { players });
-
-const patchCloseTournament = (id) => baseApi.patch('/tournaments/close', { id });
-
-const useActiveTournament = () => {
+const useActiveTournamentGames = (id, games) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTournament, setActiveTournament] = useState(null);
-  const [activeGames, setActiveGames] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [activeGames, setActiveGames] = useState( games || []);
 
-  useFocusEffect(
-    useCallback(() => {
-      async function fetchTournament() {
-        setIsLoading(true);
+  async function fetchTournamentGames(statusSetter) {
+        statusSetter(true);
         try {
-          const { data } = await getTournament(tournamentsStatuses.OPENED);
+            const gamesRes = await getGames(id);
 
-          if (data?.[0]) {
-            setActiveTournament(data[0]);
-
-            const gamesRes = await getGames(data[0]._id);
-
-            setActiveGames(gamesRes.data);
-          }
+            setActiveGames([...gamesRes.data]);
+            statusSetter(false);
 
         } catch (error) {
 
-          // console.error(messages.failedToFetch);
+          console.error(messages.failedToFetch);
         }
-        setIsLoading(false);
+        statusSetter(false);
       }
-      fetchTournament();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (activeGames.length) {
+        setIsLoading(false)
+      } else {
+        fetchTournamentGames(setIsLoading);
+      }
     }, [])
   );
 
-  const createTournament = async (players) => {
-    setIsLoading(true);
-    try {
-      const { data } = await postTournament(players);
+ 
 
-      setActiveTournament(data.tournament);
-      setActiveGames(data.games)
-    } catch (error) {
-      // console.error(messages.failedToFetch);
-    }
-    setIsLoading(false);
-  };
-
-  const closeTournament = async () => {
-    setIsLoading(true);
-    try {
-      if (!activeTournament) {
-        return;
-      }
-  
-      await patchCloseTournament(activeTournament._id);
-
-      setActiveTournament(null);
-      setActiveGames([])
-    } catch (error) {
-      console.error(messages.failedToFetch);
-    }
-    setIsLoading(false);
-  }
+  const onRefresh = useCallback(() => {
+    fetchTournamentGames(setIsRefreshing);
+  }, []);
 
   return {
     isLoading,
-    activeTournament,
-    activeGames,
-    createTournament,
-    closeTournament
+    isRefreshing,
+    onRefresh,
+    activeGames
   };
 };
 
-export { useActiveTournament };
+export { useActiveTournamentGames };

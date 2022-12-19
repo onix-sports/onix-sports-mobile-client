@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View, RefreshControl } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -7,6 +7,8 @@ function ScreenWrapper({
   withScrollView = true,
   style = null,
   contentContainerStyle,
+  isRefreshing,
+  onRefresh,
   ...props
 }) {
   const { colors } = useTheme();
@@ -30,11 +32,38 @@ function ScreenWrapper({
         alwaysBounceVertical={false}
         showsVerticalScrollIndicator={false}
         style={[containerStyle, style]}
+        refreshControl={onRefresh 
+          ? <RefreshControl
+              refreshing={isRefreshing}
+              colors={colors.indicators}
+              onRefresh={onRefresh}
+              tintColor={colors.indicators}
+            /> 
+          : null}
       >
         {children}
       </ScrollView>
     );
   }
+
+  if (onRefresh) {
+    return (
+      <ScrollView
+        {...props}
+        contentContainerStyle={contentContainerStyle}
+        style={[containerStyle, style]}
+        refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
+        }
+      >
+        {children}
+      </ScrollView>
+    );
+  }
+
   return <View style={[containerStyle, style]}>{children}</View>;
 }
 

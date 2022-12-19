@@ -11,7 +11,9 @@ import {
   SettingsScreen,
   SignInScreen,
   WidgetScreen,
-  GameTrackerScreen
+  GameTrackerScreen,
+  GenerationTournamentScreen,
+  ActiveTmGamesScreen
 } from '../../screens';
 
 const Stack = createStackNavigator();
@@ -36,6 +38,16 @@ function RootNavigator() {
               options={{
                 headerTitle: (props) => <LogoTitle {...props} />,
               }}
+            />
+            <Stack.Screen
+              name="GenerationTournament"
+              component={GenerationTournamentScreen}
+              options={{ title: '' }}
+            />
+            <Stack.Screen
+              name="ActiveTmGames"
+              component={ActiveTmGamesScreen}
+              options={{ title: '' }}
             />
             <Stack.Screen
               name="Settings"

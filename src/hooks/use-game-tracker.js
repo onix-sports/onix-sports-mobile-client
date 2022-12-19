@@ -1,6 +1,3 @@
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
-
 import { ws } from '../libs';
 import { messages } from '../utils';
 

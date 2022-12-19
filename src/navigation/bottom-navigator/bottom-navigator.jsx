@@ -3,8 +3,8 @@ import { BottomNavigation, Text, useTheme } from 'react-native-paper';
 import { Platform } from 'react-native';
 
 import { Leaderboard } from '../../screens/leaderboard-screen';
-import { ActiveTournament } from '../../screens/active-tm-screen'
 import { NavigationProvider } from '../../contexts';
+import { ActiveTournaments } from '../../screens'
 
 import { IconButton, Menu } from 'react-native-paper';
 import { ScreenWrapper } from '../../components';
@@ -14,21 +14,27 @@ const MusicRoute = () => <Text>In Development ...</Text>;
 
 const NotificationsRoute = () => <Text>In Development ...</Text>;
 
-const BottomNavigator = ({ navigation }) => {
+const BottomNavigator = ({ navigation, route }) => {
   const theme = useTheme();
-  
   const [index, setIndex] = React.useState(2);
   const [routes] = React.useState([
     { key: 'home', title: 'Home', icon: 'home' },
     { key: 'leaderboard', title: 'Leaderboard', icon: 'scoreboard' },
-    { key: 'activeGames', title: 'Active Games', icon: 'soccer' },
+    { key: 'activeGames', title: 'Tournaments', icon: 'soccer' },
     { key: 'userGrow', title: 'My Grow', icon: 'chart-donut-variant' },
   ]);
+
+  React.useEffect(() => {
+    if (route.params?.active) {
+      setIndex(route.params?.active)
+    }
+
+  }, [route.params?.active])
 
   const renderScene = BottomNavigation.SceneMap({
     home: MusicRoute,
     leaderboard: Leaderboard,
-    activeGames: ActiveTournament,
+    activeGames: ActiveTournaments,
     userGrow: NotificationsRoute,
   });
 

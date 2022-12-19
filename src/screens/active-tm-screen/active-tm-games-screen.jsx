@@ -1,28 +1,28 @@
 import * as React from 'react';
-import { useNavigation } from '@react-navigation/native';
-
-import { ScreenWrapper,  ScreenActivityIndicator } from '../../components';
-import { useActiveTournament } from '../../hooks';
-
-import { GenerationTournament } from './gen-tm-screen';
 import { Text, IconButton, Title, Button } from 'react-native-paper';
 import {View, TouchableOpacity, StyleSheet } from 'react-native'
 
-export const ActiveTournament = () => {
-    const navigation = useNavigation();
+import { ScreenWrapper,  ScreenActivityIndicator } from '../../components';
+import { useActiveTournamentGames, useActiveTournaments } from '../../hooks';
 
-    const {isLoading, activeTournament, activeGames, createTournament, closeTournament} = useActiveTournament();
+const ActiveTmGamesScreen = ({ navigation, route }) => {
+    const {
+        isLoading, 
+        activeGames,
+        isRefreshing,
+        onRefresh
+    } = useActiveTournamentGames(route.params?.id, route.params?.games);
+
+    const {
+        closeTournament, 
+    } = useActiveTournaments();
 
     if (isLoading) {
         return <ScreenActivityIndicator />
     }
 
-    if (!activeTournament) {
-        return <GenerationTournament onCreateTournament={createTournament} />
-    }
-
     return (
-        <ScreenWrapper withScrollView={true}>
+        <ScreenWrapper withScrollView={true} isRefreshing={isRefreshing} onRefresh={onRefresh}>
                 <View style={{ marginBottom: 10 }}>
                     <View style={styles.container} accessibilityRole="button" accessible>
                         <Title style={styles.indexRow}></Title>
@@ -41,26 +41,26 @@ export const ActiveTournament = () => {
                                     status
                                 })
                             }}>
-                            <View style={styles.gameWrap} accessibilityRole="button" accessible>
-                                <Text style={styles.indexRow}>{index + 1}.</Text>
-                                <View style={styles.redRow}>
-                                    <Text style={styles.redText} id={players[0]._id}>{players[0].name}</Text>
-                                    <Text style={styles.redText} id={players[1]._id}>{players[1].name}</Text>
+                                <View style={styles.gameWrap} accessibilityRole="button" accessible>
+                                    <Text style={styles.indexRow}>{index + 1}.</Text>
+                                    <View style={styles.redRow}>
+                                        <Text style={styles.redText} id={players[0]._id}>{players[0].name}</Text>
+                                        <Text style={styles.redText} id={players[1]._id}>{players[1].name}</Text>
+                                    </View>
+                                    <Text style={styles.statusRow}>{status}</Text>
+                                    <View style={styles.blueRow}>
+                                        <Text style={styles.blueText} id={players[2]._id}>{players[2].name}</Text>
+                                        <Text style={styles.blueText} id={players[3]._id}>{players[3].name}</Text>
+                                    </View>
+                                    <View style={styles.indexRow}>
+                                        <IconButton size={26} icon="gesture-tap-hold" iconColor={'#777'} />
+                                    </View>
                                 </View>
-                                <Text style={styles.statusRow}>{status}</Text>
-                                <View style={styles.blueRow}>
-                                    <Text style={styles.blueText} id={players[2]._id}>{players[2].name}</Text>
-                                    <Text style={styles.blueText} id={players[3]._id}>{players[3].name}</Text>
-                                </View>
-                                <View style={styles.indexRow}>
-                                    <IconButton size={26} icon="gesture-tap-hold" iconColor={'#777'} />
-                                </View>
-                            </View>
                             </TouchableOpacity>
                         )
                     })}
                 </View>
-                <Button disabled={false} style={styles.close} icon="gamepad" mode="contained" onPress={closeTournament}>
+                <Button style={styles.close} icon="gamepad" mode="contained" onPress={() => closeTournament(route.params?.id, true)}>
                     Close Tournament
                 </Button>
         </ScreenWrapper>
@@ -95,3 +95,6 @@ const styles = StyleSheet.create({
   statusRow: { flex: 2, textAlign, fontSize: viewFontSize, padding: rowPadding },
   blueRow: { flex: 3 }
 });
+
+
+export { ActiveTmGamesScreen }
