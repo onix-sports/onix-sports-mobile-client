@@ -17,6 +17,9 @@ module.exports = ({ config }) => {
       // wsUrl: 'ws://localhost:3010',
       // baseApiUrl: 'https://onix-sports-beta.herokuapp.com',
       // wsUrl: 'wss://onix-sports-beta.herokuapp.com',
+      // baseApiUrl: 'https://186f-195-62-14-236.ngrok.io',
+      // wsUrl: 'wss://186f-195-62-14-236.ngrok.io',
+
       thingSpeakApiUrl: process.env.THINGSPEAK_API_URL,
     },
   };

@@ -59,14 +59,13 @@ const useActiveTournaments = () => {
       if (redirect) {
         navigation
           .navigate('ActiveTmGames', { 
-            id: data.tournament,
+            id: data.tournament._id,
             games: data.games
           });
       }
 
       return data;
     } catch (error) {
-      console.log('error :>> ', error);
       setIsLoading(false);
       console.error(messages.failedToFetch);
 
@@ -78,7 +77,6 @@ const useActiveTournaments = () => {
     setIsLoading(true);
 
     try {
-      console.log('id :>> ', id);
       await patchCloseTournament(id);
 
       setActiveTournaments(activeTournaments.filter((tm => tm._id !== id)));

@@ -24,7 +24,6 @@ const useActiveTournamentGames = (id, games) => {
             statusSetter(false);
 
         } catch (error) {
-
           console.error(messages.failedToFetch);
         }
         statusSetter(false);

@@ -6,7 +6,7 @@ const useDimensions = () => {
   const [isLandscape, setIsLandscape] = useState(false);
 
   useEffect(() => {
-    Dimensions.addEventListener('change', () => {
+    const dimensionListener = Dimensions.addEventListener('change', () => {
       const dim = Dimensions.get('screen');
 
       const isPortrait = dim.height >= dim.width;
@@ -14,10 +14,15 @@ const useDimensions = () => {
       setIsPortrait(isPortrait);
       setIsLandscape(!isPortrait);
     });
+
+    return () => {
+      dimensionListener.remove();
+    }
   }, []);
 
   return {
-    useDimensions,
+    isPortrait,
+    isLandscape
   };
 };
 

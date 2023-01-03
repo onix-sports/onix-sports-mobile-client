@@ -13,6 +13,106 @@ import duration from 'dayjs/plugin/duration';
 
 dayjs.extend(duration);
 
+const screenTypes = {
+    portrait: 'portrait',
+    landScape: 'landscape'
+}
+
+const fullScreenOpt = {
+    [screenTypes.portrait]: {
+        root: {
+            style: { alignItems: 'center', position: 'relative', marginBottom: 25 }
+        },
+        fsBtn: {
+            icon: 'fullscreen',
+            actionType: screenTypes.landScape,
+            size: 30,
+            style: { position: 'absolute', top: -7, right: -7 }
+        },
+        gameField: {
+            width: '100%',
+            height: 350,
+            style: {}
+        },
+        pauseBtn: {
+            style: { position: 'absolute', top: 132, zIndex: 140 },
+            size: 50
+        },
+        pauseBg: {
+            height: 380,
+            width: '100%'
+        },
+        goals: {
+            style: { position: 'absolute', top: -1, flexDirection: 'row' }
+        },
+        selectedActions: {
+            style: {  }
+        }
+    },
+    [screenTypes.landScape]: {
+        root: {
+            style: { transform: [{ rotate: '90deg'}], alignItems: 'center', position: 'relative', marginBottom: 25 }
+        },
+        fsBtn: {
+            icon: 'fullscreen-exit',
+            actionType: screenTypes.portrait,
+            size: 34,
+            style: { 
+                backgroundColor: '#00000070', 
+                borderRadius: 10, 
+                position: 'absolute', 
+                top: '23.3%', 
+                zIndex: 90, 
+                right:  '-26.5%',
+            }
+        },
+        gameField: {
+            width: '165%',
+            height: '100%',
+            style: {  marginTop: 0 }
+        },
+        pauseBtn: {
+            style: { 
+                position: 'absolute', 
+                top: '50%',
+                zIndex: 140,
+                transform: [{ translateY: -65 }]
+            },
+            size: 80
+        },
+        pauseBg: {
+            height: '100%',
+            width: '500%'
+        },
+        goals: {
+            style: { 
+                position: 'absolute', 
+                top: '24%',
+                flexDirection: 'row', 
+                right: '50%',
+                transform: [{ translateX: 47 }], 
+                zIndex: 90,
+                backgroundColor: '#00000070',
+                paddingLeft: 10,
+                paddingRight: 10,
+                borderRadius: 10,
+             }
+        },
+        selectedActions: {
+            style: { 
+                zIndex: 90,
+                bottom: '24%',
+                left: '-25%',
+                backgroundColor: '#00000070',
+                width: '150%',
+                flexDirection: 'column', 
+                justifyContent: 'space-between'
+             }
+        }
+        
+    },
+}
+
 function GoalsT({ color, text }) {
     return (<Title style={{ fontSize: 24, color, padding: 5, fontWeight: "800" }}>{text}</Title>)
 }
@@ -25,6 +125,8 @@ function GameTrackerScreen({ route }) {
     const { session } = useAuth();
 
     const [gameController, setGameController] = React.useState(null);
+
+    const [screenMode, setScreenMode] = React.useState(screenTypes.portrait);
 
     const [selectedPlayerId, setSelectedPlayer] = React.useState(null);
 
@@ -80,14 +182,23 @@ function GameTrackerScreen({ route }) {
   
     return (
         <ScreenWithLoader isLoading={false}>
-                <View style={{ alignItems: 'center', position: 'relative', marginBottom: 25 }}>
-                <View style={{ position: 'absolute', zIndex: paused ? 120 : -1, backgroundColor: paused ? '#00000090' : null, width: '100%', height: 380 }}></View>
-                    <View style={{ position: 'absolute', top: 5, flexDirection: 'row' }}>
+                <View style={fullScreenOpt[screenMode].root.style}>
+                <View style={{ position: 'absolute', zIndex: paused ? 120 : -1, backgroundColor: paused ? '#00000090' : null, width: fullScreenOpt[screenMode].pauseBg.width, height: fullScreenOpt[screenMode].pauseBg.height }}></View>
+                    <View style={fullScreenOpt[screenMode].goals.style}>
                         <GoalsT text={score.red} color={'#c2524a'} />
                         <GoalsT text={'X'} color={'#fff'} />
                         <GoalsT text={score.blue} color={'#4099e0'} />
                     </View>
-                    <GameTimer startedAt={startedAt} />
+                    <GameTimer startedAt={startedAt} activities={activities} screenMode={screenMode} />
+                    <IconButton
+                            icon={fullScreenOpt[screenMode].fsBtn.icon}
+                            color={'#fff'}
+                            style={fullScreenOpt[screenMode].fsBtn.style}
+                            size={fullScreenOpt[screenMode].fsBtn.size}
+                            onPress={() => {
+                                setScreenMode(fullScreenOpt[screenMode].fsBtn.actionType)
+                            }}
+                    />
                   
                     {session.role === 'admin' 
                         ? (<>
@@ -95,8 +206,8 @@ function GameTrackerScreen({ route }) {
                                 <IconButton
                                     icon={paused ? 'play-circle' : "pause-circle"}
                                     color={'#fff'}
-                                    style={{ position: 'absolute', top: 132, zIndex: 140 }}
-                                    size={50}
+                                    style={fullScreenOpt[screenMode].pauseBtn.style}
+                                    size={fullScreenOpt[screenMode].pauseBtn.size}
                                     onPress={() => {
                                         setPaused(!paused);
                                         gameController.pause();
@@ -124,13 +235,15 @@ function GameTrackerScreen({ route }) {
                         setSelected={setSelectedPlayer} 
                         autogolPlayer={autogolPlayer} 
                         onAutogol={onAutogol} 
+                        screenMode={screenMode}
                     />
                     <GameFieldImg
-                        width={'100%'}
-                        height={350}
+                        width={fullScreenOpt[screenMode].gameField.width}
+                        height={fullScreenOpt[screenMode].gameField.height}
+                        style={fullScreenOpt[screenMode].gameField.style}
                     />
                     {selectedPlayerId && !paused && (
-                    <View style={{ position: 'absolute', bottom: canMakeAction ? -15 : 5, alignItems: 'center', width: '100%' }}>
+                    <View style={{ position: 'absolute', bottom: canMakeAction ? -20 : 5, alignItems: 'center', width: '100%', ...fullScreenOpt[screenMode].selectedActions.style }}>
                         <Title>{autogolPlayer ? 'Select enemy you will give a goal' : `${selectedPlayer.name}, goals: | G: ${selectedPlayer.rGoals} | F: ${selectedPlayer.mGoals} |`}</Title>
                         {canMakeAction && (
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -144,14 +257,12 @@ function GameTrackerScreen({ route }) {
                                 </Button>
                             </View>
                         )}
-                        
-                        
                     </View>
                     )}
                     
                 </View>
                 <Divider />
-                <GameActivitiesList activities={activities} onDelete={gameController?.cancel} />        
+                <GameActivitiesList activities={activities} onDelete={gameController?.cancel} canMakeAction={canMakeAction} />        
         </ScreenWithLoader>
     );
 }
