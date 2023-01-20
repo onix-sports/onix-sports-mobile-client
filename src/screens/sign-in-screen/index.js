@@ -1,1 +1,1 @@
-export * from './sign-in-screen';
+export * from './sign-in-telegram-screen';

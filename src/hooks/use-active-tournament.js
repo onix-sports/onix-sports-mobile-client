@@ -1,10 +1,10 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
-import { baseApi } from '../libs';
+import { api } from '../libs';
 import { messages } from '../utils';
 
 
-const getGames = (tournament) => baseApi.get('/games', {
+const getGames = (tournament) => api.v1.get('/games', {
   params: {
     tournament
   }
@@ -20,7 +20,7 @@ const useActiveTournamentGames = (id, games) => {
         try {
             const gamesRes = await getGames(id);
 
-            setActiveGames([...gamesRes.data]);
+            setActiveGames([...gamesRes.data.data]);
             statusSetter(false);
 
         } catch (error) {

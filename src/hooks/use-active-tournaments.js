@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation  } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
-import { baseApi } from '../libs';
+import { api } from '../libs';
 import { messages } from '../utils';
 
 const tournamentsStatuses = {
@@ -8,16 +8,16 @@ const tournamentsStatuses = {
   OPENED: 'OPENED'
 }
 
-const getTournaments = (status) => baseApi.get('/tournaments', {
+const getTournaments = (status) => api.v1.auth().get('/tournaments', {
   params: {
     status,
     limit: 100
   }
 });
 
-const postTournament = (players) => baseApi.post('/tournaments/generate', { players });
+const postTournament = (players) => api.v1.auth().post('/tournaments/generate', { players });
 
-const patchCloseTournament = (id) => baseApi.patch('/tournaments/close', { id });
+const patchCloseTournament = (id) => api.v1.auth().patch('/tournaments/close', { id });
 
 const useActiveTournaments = () => {
   const navigation = useNavigation();
@@ -30,7 +30,8 @@ const useActiveTournaments = () => {
         statusSetter(true);
         try {
           const { data } = await getTournaments(tournamentsStatuses.OPENED);
-          setActiveTournaments([...data]);
+
+          setActiveTournaments([...data.data]);
 
         } catch (error) {
           console.error(messages.failedToFetch);
@@ -54,18 +55,19 @@ const useActiveTournaments = () => {
       const { data } = await postTournament(players);
 
       setIsLoading(false);
-      setActiveTournaments([ data, ...activeTournaments ]);
+      setActiveTournaments([ data.data, ...activeTournaments ]);
 
       if (redirect) {
         navigation
           .navigate('ActiveTmGames', { 
-            id: data.tournament._id,
-            games: data.games
+            id: data.data.tournament._id,
+            games: data.data.games
           });
       }
 
-      return data;
+      return data.data;
     } catch (error) {
+      console.log('error :>> ', error);
       setIsLoading(false);
       console.error(messages.failedToFetch);
 

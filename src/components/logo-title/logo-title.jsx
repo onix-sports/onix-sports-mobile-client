@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
 function LogoTitle() {
-  return <Text style={styles.logo}>Onix Football</Text>;
+  return <Text style={styles.logo}>Soccer Club</Text>;
 }
 
 const styles = StyleSheet.create({

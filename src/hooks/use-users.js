@@ -1,10 +1,10 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 
-import { baseApi } from '../libs';
+import { api } from '../libs';
 import { messages } from '../utils';
 
-const getUsers = () => baseApi.get('/users', {
+const getUsers = () => api.v1.get('/users', {
   limit: 100
 });
 
@@ -21,7 +21,7 @@ const useUsers = () => {
         try {
          const { data } = await getUsers();
 
-          setUsers(data);
+          setUsers(data.data);
         } catch (err) {
           // console.log('err.response :>> ', err.response);
           // console.log('err.response.data :>> ', err.toJSON());

@@ -9,7 +9,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
-import { LogBox } from 'react-native';
+import { LogBox, Linking } from 'react-native';
 import { useAuth, usePreferences } from './src/hooks';
 import { fonts } from './src/core';
 import { AuthProvider, GlobalProvider, PreferencesProvider } from './src/contexts';
@@ -30,6 +30,12 @@ function Main() {
   useEffect(() => {
     async function prepare() {
       await Font.loadAsync(fonts);
+
+      //
+      const initialUrl = await Linking.getInitialURL();
+      console.log('initialUrl :>> ', initialUrl);
+      //
+
       setAppIsReady(true);
     }
 

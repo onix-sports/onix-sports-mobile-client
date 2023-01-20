@@ -72,7 +72,7 @@ const BottomNavigator = ({ navigation, route }) => {
 
   return (
     <ScreenWrapper withScrollView={false}>
-      <NavigationProvider rootNav={navigation}>
+      <NavigationProvider rootNav={navigation} setBottomNav={setIndex}>
         <BottomNavigation
           navigationState={{ index, routes }}
           onIndexChange={setIndex}

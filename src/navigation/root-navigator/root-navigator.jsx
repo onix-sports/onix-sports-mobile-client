@@ -1,16 +1,14 @@
 import { createStackNavigator } from '@react-navigation/stack';
+import { useCallback, useEffect, useState } from 'react';
+import { LogBox, Linking } from 'react-native';
 
 import { BottomNavigator } from '../bottom-navigator';
 
 import { LogoTitle } from '../../components';
-import { useAuth } from '../../hooks';
+import { useAuth, useLinkingNav } from '../../hooks';
 import {
-  ChannelListScreen,
-  ChannelScreen,
-  DashboardScreen,
   SettingsScreen,
-  SignInScreen,
-  WidgetScreen,
+  SignInTelegramScreen,
   GameTrackerScreen,
   GenerationTournamentScreen,
   ActiveTmGamesScreen
@@ -20,7 +18,8 @@ const Stack = createStackNavigator();
 
 function RootNavigator() {
   const { isSignedIn } = useAuth();
-
+  useLinkingNav();
+  
   return (
     <Stack.Navigator
       screenOptions={{
@@ -63,7 +62,7 @@ function RootNavigator() {
       ) : (
         <Stack.Screen
           name="SignIn"
-          component={SignInScreen}
+          component={SignInTelegramScreen}
           options={{
             headerShown: false,
           }}

@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import { baseApi } from '../../libs';
+import { api } from '../../libs';
 import { messages } from '../../utils';
 import { AuthContext } from './auth-context';
 
-// const getSession = () => baseApi.get('/auth/user');
-const getSession = () => Promise.resolve({ data: { username: 'ya_myn', fullName: 'Test User', initials: 'Y M', role: 'admin' } })
+// const getSession = () => api.v1.get('/auth/user');
+const getSession = () => Promise.reject('error')
 
-const login = (data) => baseApi.post('/auth/login', data);
-
-const logout = (data) => baseApi.post('/auth/logout', data);
+const logout = () => api.v1.auth().delete('/auth/logout');
 
 function AuthProvider({ children }) {
   const [isValidating, setIsValidating] = useState(true);
@@ -32,14 +30,19 @@ function AuthProvider({ children }) {
 
   const onLogin = async (username, password) => {
     try {
-      //MOCK
-      // await login({ username, password });
-      //
-      //
-      // const { data } = await getSession();
-      ///
-
       const data = { username, fullName: 'Test User', initials: 'Y M', role: 'admin' }
+      setSession(data);
+      setIsSignedIn(true);
+    } catch (err) {
+      console.log(`${messages.fetchOperationFailed}: ${err.message}`);
+      throw err;
+    }
+  };
+
+  const onLoginOauth = async (tokens) => {
+    try {
+      const data = { username: 'ya myn', fullName: 'Test User', initials: 'Y M', role: 'admin', tokens };
+      api.setAuth(tokens);
       setSession(data);
       setIsSignedIn(true);
     } catch (err) {
@@ -50,8 +53,13 @@ function AuthProvider({ children }) {
 
   const onLogout = async () => {
     await logout();
+    api.setAuth({
+      accessToken: null,
+      refreshToken: null
+    });
     setIsSignedIn(false);
   };
+
 
   return (
     <AuthContext.Provider
@@ -61,6 +69,7 @@ function AuthProvider({ children }) {
         session,
         onLogin,
         onLogout,
+        onLoginOauth
       }}
     >
       {children}
