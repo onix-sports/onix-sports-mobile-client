@@ -4,7 +4,7 @@ import { api } from '../libs';
 import { messages } from '../utils';
 
 
-const getGames = (tournament) => api.v1.get('/games', {
+const getGames = (tournament) => api.v1.auth().get('/games', {
   params: {
     tournament
   }

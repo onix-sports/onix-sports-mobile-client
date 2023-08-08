@@ -3,9 +3,10 @@ import { useCallback, useState } from 'react';
 import { api } from '../libs';
 import { messages } from '../utils';
 
-const getLeaderboard = () => api.v1.get('/statistics/leaderboard', {
+const getLeaderboard = (organization) => api.v1.auth().get('/statistics/leaderboard', {
   params: {
-    dateFrom: new Date(new Date().getFullYear(), Math.floor(new Date().getMonth() / 3) * 3, 1)
+    dateFrom: new Date(new Date().getFullYear(), Math.floor(new Date().getMonth() / 3) * 3, 1),
+    organization
   }
 });
 

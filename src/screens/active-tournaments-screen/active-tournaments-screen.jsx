@@ -65,38 +65,39 @@ const ActiveTournaments = () => {
     return (
         <View style={{height: '100%', position: 'relative'}}>
             <ScreenWrapper withScrollView={true} isRefreshing={isRefreshing} onRefresh={onRefresh}>
-            <View style={{ width: '100%', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', alignContent: 'center' }}>
-                {
-                activeTournaments.map((tournament, index) => {
-                    const { _id, title } = tournament;
-                    const shortTitle = parseTitleShort(title, index);
+                <View style={{ width: '100%', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', alignContent: 'center' }}>
+                    {
+                    activeTournaments.map((tournament, index) => {
+                        const { _id, title } = tournament;
+                        const shortTitle = parseTitleShort(title, index);
 
-                    return <Card style={{
-                        height: 180,
-                        width: 180,
-                        borderColor: '#fff',
-                        borderWidth: 0.5,
-                        margin: 5,           
-                    }} key={_id} onPress={() => {
-                        navigation
-                            .navigate('ActiveTmGames', {
-                                    id: _id,
-                            })
-                    }}
-                    >
-                    
-                    <Card.Cover 
-                        source={{ uri: getImgUrl(shortTitle.id) }} 
-                        style={{ width: '75%', height: '70%', marginLeft: '12.5%', marginTop: 17 }}
-                    />
-                    <Card.Content>
-                        <Title style={{fontSize: 14, textAlign: 'center'}}>{shortTitle.title}</Title>
-                    </Card.Content>
-                    </Card>
-                }) 
-                }
-            </View>
+                        return <Card style={{
+                            height: 180,
+                            width: 180,
+                            borderColor: '#fff',
+                            borderWidth: 0.5,
+                            margin: 5,           
+                        }} key={_id} onPress={() => {
+                            navigation
+                                .navigate('ActiveTmGames', {
+                                        id: _id,
+                                })
+                        }}
+                        >
+                        
+                        <Card.Cover 
+                            source={{ uri: getImgUrl(shortTitle.id) }} 
+                            style={{ width: '75%', height: '70%', marginLeft: '12.5%', marginTop: 17 }}
+                        />
+                        <Card.Content>
+                            <Title style={{fontSize: 14, textAlign: 'center'}}>{shortTitle.title}</Title>
+                        </Card.Content>
+                        </Card>
+                    }) 
+                    }
+                </View>
             </ScreenWrapper>
+            
             <FAB
                 icon="plus"
                 style={styles.fab}

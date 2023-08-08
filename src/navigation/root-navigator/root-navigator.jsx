@@ -11,15 +11,22 @@ import {
   SignInTelegramScreen,
   GameTrackerScreen,
   GenerationTournamentScreen,
-  ActiveTmGamesScreen
+  ActiveTmGamesScreen,
+  OrganizationScreen,
+  OrganizationSettingsScreen
 } from '../../screens';
+import { useOrganizations } from '../../hooks/use-organizations';
+import { OrganizationCreationScreen } from '../../screens/organizations-screen/organization-creation-screen';
+import { OrganizationJoinScreen } from '../../screens/organizations-screen/organization-join-screen';
 
 const Stack = createStackNavigator();
 
 function RootNavigator() {
   const { isSignedIn } = useAuth();
+  const { organization: isOrganizationChoosed } = useOrganizations(); 
+
   useLinkingNav();
-  
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -30,35 +37,62 @@ function RootNavigator() {
       }}
     >
       {isSignedIn ? (
-          <Stack.Group>
-            <Stack.Screen
-              name="Back"
-              component={BottomNavigator}
-              options={{
-                headerTitle: (props) => <LogoTitle {...props} />,
-              }}
-            />
-            <Stack.Screen
-              name="GenerationTournament"
-              component={GenerationTournamentScreen}
-              options={{ title: '' }}
-            />
-            <Stack.Screen
-              name="ActiveTmGames"
-              component={ActiveTmGamesScreen}
-              options={{ title: '' }}
-            />
-            <Stack.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={{ title: 'Settings' }}
-            />
-            <Stack.Screen
-              name="GameTracker"
-              component={GameTrackerScreen}
-              options={{ title: '' }}
-            />
-          </Stack.Group>
+          !isOrganizationChoosed ? (
+              <Stack.Group>
+                <Stack.Screen
+                  name="Organizations"
+                  component={OrganizationScreen}
+                  options={{ title: '' }}
+                />
+
+                <Stack.Screen
+                  name="OrganizationCreation"
+                  component={OrganizationCreationScreen}
+                  options={{ title: '' }}
+                />
+
+                <Stack.Screen
+                  name="OrganizationJoin"
+                  component={OrganizationJoinScreen}
+                  options={{ title: '' }}
+                />
+              </Stack.Group>
+            ) : (
+              <Stack.Group>
+                <Stack.Screen
+                  name="Back"
+                  component={BottomNavigator}
+                  options={{
+                    headerTitle: (props) => <LogoTitle {...props} />,
+                  }}
+                />
+                <Stack.Screen
+                  name="GenerationTournament"
+                  component={GenerationTournamentScreen}
+                  options={{ title: '' }}
+                />
+                <Stack.Screen
+                  name="ActiveTmGames"
+                  component={ActiveTmGamesScreen}
+                  options={{ title: '' }}
+                />
+                <Stack.Screen
+                  name="Settings"
+                  component={SettingsScreen}
+                  options={{ title: 'Settings' }}
+                />
+                <Stack.Screen
+                  name="OrganizationSettings"
+                  component={OrganizationSettingsScreen}
+                  options={{ title: 'Organization' }}
+                />
+                <Stack.Screen
+                  name="GameTracker"
+                  component={GameTrackerScreen}
+                  options={{ title: '' }}
+                />
+              </Stack.Group>
+          )
       ) : (
         <Stack.Screen
           name="SignIn"

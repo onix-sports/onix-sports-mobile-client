@@ -2,20 +2,22 @@ import { useFocusEffect, useNavigation  } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { api } from '../libs';
 import { messages } from '../utils';
+import { useOrganizations } from './use-organizations';
 
 const tournamentsStatuses = {
   CLOSED: 'CLOSED',
   OPENED: 'OPENED'
 }
 
-const getTournaments = (status) => api.v1.auth().get('/tournaments', {
+const getTournaments = (status, organization) => api.v1.auth().get('/tournaments', {
   params: {
     status,
-    limit: 100
+    limit: 100,
+    organization
   }
 });
 
-const postTournament = (players) => api.v1.auth().post('/tournaments/generate', { players });
+const postTournament = (players, organization) => api.v1.auth().post('/tournaments/generate', { players, organization });
 
 const patchCloseTournament = (id) => api.v1.auth().patch('/tournaments/close', { id });
 
