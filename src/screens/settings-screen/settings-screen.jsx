@@ -3,9 +3,11 @@ import { Avatar, List } from 'react-native-paper';
 import sleep from 'sleep-promise';
 import { Button, ScreenWrapper } from '../../components';
 import { useAuth, useGlobal } from '../../hooks';
+import { useOrganizations } from '../../hooks/use-organizations';
 
 function SettingsScreen() {
   const { confirm, progress } = useGlobal();
+  const { selectOrganization } = useOrganizations();
 
   const {
     session,
@@ -29,6 +31,8 @@ function SettingsScreen() {
     progress.hide();
   };
 
+  const handleOrganizationPress = () => selectOrganization(null);
+
   return (
     <ScreenWrapper>
       <List.Section>
@@ -41,6 +45,15 @@ function SettingsScreen() {
           description={username}
         />
       </List.Section>
+          
+      <Button
+        mode="contained"
+        style={styles.signOutButton}
+        onPress={handleOrganizationPress}
+      >
+        Change organization
+      </Button>
+
       <Button
         mode="contained"
         style={styles.signOutButton}

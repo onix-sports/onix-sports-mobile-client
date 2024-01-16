@@ -113,6 +113,7 @@ function Players({ players, canMakeAction, onSwap, selected, setSelected, autogo
                     <SwapEl onPress={() => onSwap(players[2]._id)} screenMode={screenMode} />
                 </>
             )}
+
             <Player player={players[0]} selected={selected} onPress={setSelected} autogolPlayer={autogolPlayer} onAutogol={onAutogol} screenMode={screenMode} />
             <Player player={players[1]} selected={selected} onPress={setSelected} autogolPlayer={autogolPlayer} onAutogol={onAutogol} screenMode={screenMode} />
             <Player player={players[2]} selected={selected} onPress={setSelected} autogolPlayer={autogolPlayer} onAutogol={onAutogol} screenMode={screenMode} />

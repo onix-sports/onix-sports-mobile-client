@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { api } from '../libs';
 import { messages } from '../utils';
 
-const getUsers = () => api.v1.get('/users', {
+const getUsers = () => api.v1.auth().get('/users/members', {
   limit: 100
 });
 

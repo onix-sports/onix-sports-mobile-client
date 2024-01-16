@@ -14,8 +14,8 @@ function SignInTelegramScreen() {
   const handleSignInPress = async () => {
     try {
       setIsLoading(true);
-      const redirectUrl = ExpoLinking.createURL('sign-in-oauth');
 
+      const redirectUrl = ExpoLinking.createURL('sign-in-oauth');
       const uri = `${api.v1.url}/auth/telegram/sign-in?redirect=${redirectUrl}`;
    
       await forOs()

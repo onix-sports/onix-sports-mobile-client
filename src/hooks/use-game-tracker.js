@@ -7,6 +7,7 @@ export const GameStatus = {
   PAUSED: 'PAUSED',
   FINISHED: 'FINISHED',
   UNPAUSED: 'UNPAUSED',
+  PENDING: 'PENDING',
 }
 
 const useGameTracker = () => {
@@ -43,19 +44,25 @@ const useGameTracker = () => {
     })
   }
 
+  const finish = (id) => {
+    withConnect((socket) => {
+      socket.emit('finish', { id });
+    })
+  };
+
   const onUpdate = (id, cb, status) => {
     withConnect((socket) => {
       socket.on("data", (data) => {
-        if (data.id === id) {
-          cb(data);
-        }
+        cb(data);
       });
 
-      if (status === GameStatus.DRAFT) {
-        return socket.emit('start', { id });
-      }
+      socket.emit('join', { id }, () => {
+        if (status === GameStatus.DRAFT) {
+          return socket.emit('start', { id });
+        }
 
-      socket.emit('data', { id });
+        socket.emit('data', { id });
+      });
     });
 
     onException((error) => {
@@ -72,7 +79,7 @@ const useGameTracker = () => {
       pause: () => pause(id),
       cancel: (actionId) => cancel(id, actionId),
       onUpdate: (cb) => onUpdate(id, cb, status),
-    
+      finish: () => finish(id),
     }
   }
 

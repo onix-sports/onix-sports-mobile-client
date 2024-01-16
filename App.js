@@ -14,6 +14,7 @@ import { useAuth, usePreferences } from './src/hooks';
 import { fonts } from './src/core';
 import { AuthProvider, GlobalProvider, PreferencesProvider } from './src/contexts';
 import { RootNavigator } from './src/navigation';
+import { OrganizationProvider } from './src/contexts/organization-context/organization-provider';
 
 LogBox.ignoreLogs([
   'Require cycles are allowed, but can result in uninitialized values.',
@@ -67,9 +68,11 @@ function Main() {
 export default function App() {
   return (
     <AuthProvider>
-      <PreferencesProvider>
-        <Main />
-      </PreferencesProvider>
+      <OrganizationProvider>
+        <PreferencesProvider>
+          <Main />
+        </PreferencesProvider>
+      </OrganizationProvider>
     </AuthProvider>
   );
 }

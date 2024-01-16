@@ -15,7 +15,6 @@ const useLinkingNav = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    console.log('lolo :>> ');
     const handleOpenURL = async (event) => { // D
 
       const {path, queryParams} = Linking.parse(event.url);

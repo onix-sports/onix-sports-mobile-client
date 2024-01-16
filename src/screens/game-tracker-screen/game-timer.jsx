@@ -28,7 +28,7 @@ const fullScreenOpt = {
             fontSize: 24, 
             left: '-25%',
             flexDirection: 'row', 
-            zIndex: 100,
+            zIndex: 150,
             backgroundColor: '#00000070',
             paddingLeft: 10,
             paddingRight: 10,
@@ -37,7 +37,7 @@ const fullScreenOpt = {
     },
 }
 
-function GameTimer({ startedAt, activities, screenMode }) {
+function GameTimer({ startedAt, activities, screenMode, paused }) {
     const [gameTime, setGameTime] = React.useState(null);
 
     React.useEffect(() => {
@@ -66,6 +66,8 @@ function GameTimer({ startedAt, activities, screenMode }) {
         }
 
         let secTimer = setInterval(() => {
+            if (paused) return;
+
             setGameTime(timeParser(startedAt, activities));
         },1000);
 

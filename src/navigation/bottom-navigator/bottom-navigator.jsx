@@ -8,7 +8,8 @@ import { ActiveTournaments } from '../../screens'
 
 import { IconButton, Menu } from 'react-native-paper';
 import { ScreenWrapper } from '../../components';
-import { useDisclose } from '../../hooks';
+import { useAuth, useDisclose } from '../../hooks';
+import { useOrganizations } from '../../hooks/use-organizations';
 
 const MusicRoute = () => <Text>In Development ...</Text>;
 
@@ -16,13 +17,15 @@ const NotificationsRoute = () => <Text>In Development ...</Text>;
 
 const BottomNavigator = ({ navigation, route }) => {
   const theme = useTheme();
-  const [index, setIndex] = React.useState(2);
+  const [index, setIndex] = React.useState(1);
   const [routes] = React.useState([
     { key: 'home', title: 'Home', icon: 'home' },
     { key: 'leaderboard', title: 'Leaderboard', icon: 'scoreboard' },
     { key: 'activeGames', title: 'Tournaments', icon: 'soccer' },
     { key: 'userGrow', title: 'My Grow', icon: 'chart-donut-variant' },
   ]);
+  const { session } = useAuth();
+  const { organization } = useOrganizations();
 
   React.useEffect(() => {
     if (route.params?.active) {
@@ -65,6 +68,15 @@ const BottomNavigator = ({ navigation, route }) => {
               onMenuClose();
             }}
           />
+          {organization.creatorId === session._id && (
+            <Menu.Item
+              title="Organization"
+              onPress={() => {
+                navigation.navigate('OrganizationSettings');
+                onMenuClose();
+              }}
+            />
+          )}
         </Menu>
       ),
     });
